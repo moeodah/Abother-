@@ -1,7 +1,8 @@
 <template>
+<body>
   <q-layout view="lHh Lpr lFf">
-    <div class="q-pa-md" style="max-width: 400px">
-
+    <div class="q-pa-md myForm" style="max-width: 400px">
+    <q-img src="../assets/Logo.png"></q-img>
     <q-form
       @submit="onSubmit"
       @reset="onReset"
@@ -9,6 +10,8 @@
     >
       <q-input
         filled
+        style="background-coloe:#7aa269"
+        class="texts"
         v-model="name"
         label="Your name *"
         hint="Name and surname"
@@ -41,6 +44,7 @@
       <router-view />
     </q-page-container>
   </q-layout>
+  </body>
 </template>
 
 <script>
@@ -88,3 +92,16 @@ export default {
   }
 }
 </script>
+<style>
+body{
+  background-color:#7aa269;
+}
+
+.myForm{
+  position:fixed;
+  top:30%;
+  left:50%;
+  margin-left: -150px;
+  margin-top: -150px;
+}
+</style>
