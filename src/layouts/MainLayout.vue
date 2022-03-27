@@ -1,107 +1,106 @@
 <template>
-<body>
-  <q-layout view="lHh Lpr lFf">
-    <div class="q-pa-md myForm" style="max-width: 400px">
-    <q-img src="../assets/Logo.png"></q-img>
-    <q-form
-      @submit="onSubmit"
-      @reset="onReset"
-      class="q-gutter-md"
-    >
-      <q-input
-        filled
-        style="background-coloe:#7aa269"
-        class="texts"
-        v-model="name"
-        label="Your name *"
-        hint="Name and surname"
-        lazy-rules
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
-      />
+    <div class="container">
+        <form>
+          <label>Name</label>
+          <input
+            type="text"
+            v-model="name"
+            name="name"
+            placeholder="Your Name"
+          >
+          <label>Email</label>
+          <input
+            type="email"
+            v-model="email"
+            name="email"
+            placeholder="Your Email"
+            >
+          <label>Message</label>
+          <textarea
+            name="message"
+            v-model="message"
+            cols="30" rows="5"
+            placeholder="Message">
+          </textarea>
 
-      <q-input
-        filled
-        type="number"
-        v-model="age"
-        label="Your age *"
-        lazy-rules
-        :rules="[
-          val => val !== null && val !== '' || 'Please type your age',
-          val => val > 0 && val < 100 || 'Please type a real age'
-        ]"
-      />
-
-      <q-toggle v-model="accept" label="I accept the license and terms" />
-
-      <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
-      </div>
-    </q-form>
-
-  </div>
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-  </q-layout>
-  </body>
+          <input type="submit" value="Send">
+        </form>
+    </div>
 </template>
-
 <script>
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
-
 export default {
-  setup () {
-    const $q = useQuasar()
+  name: 'ContactUs',
 
-    const name = ref(null)
-    const age = ref(null)
-    const accept = ref(false)
+  setup () {
+
 
     return {
-      name,
-      age,
-      accept,
-
-      onSubmit () {
-        if (accept.value !== true) {
-          $q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'warning',
-            message: 'You need to accept the license and terms first'
-          })
-        }
-        else {
-          $q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: 'Submitted'
-          })
-        }
-      },
-
-      onReset () {
-        name.value = null
-        age.value = null
-        accept.value = false
-      }
+      myname: '',
+      email: '',
+      message: '',
     }
+  },
+  methods: {
+    sendEmail(e) {
+      try {
+        emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', e.target,
+        'YOUR_USER_ID', {
+          myname: this.myname,
+          email: this.email,
+          message: this.message
+        })
+
+      } catch(error) {
+          console.log({error})
+      }
+      // Reset form field
+      this.myname = ''
+      this.email = ''
+      this.message = ''
+    },
   }
 }
 </script>
-<style>
-body{
-  background-color:#7aa269;
+<style scoped>
+* {box-sizing: border-box;}
+
+.container {
+  display: block;
+  margin:auto;
+  text-align: center;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  width: 50%;
 }
 
-.myForm{
-  position:fixed;
-  top:30%;
-  left:50%;
-  margin-left: -150px;
-  margin-top: -150px;
+label {
+  float: left;
+}
+
+input[type=text], [type=email], textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
 }
 </style>
